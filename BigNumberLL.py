@@ -84,11 +84,17 @@ class BigNumberLL: ### To complete
     def __gt__(self,y) -> bool:
         #Scan size of each 
         if self.positive and not y.positive: return True
-        if not self.positive and y.positive: return False
-        if self.positive:
+        elif not self.positive and y.positive: return False
+        #elif not self.positive and not y.positive:
+         #   newNumSelf = self
+         #   newNumY = y
+         #   newNumSelf.positive = True
+         #   newNumY.positive = True
+         #   return newNumY > newNumSelf
+        elif self.positive:
             if self.size > y.size: return True
             elif self.size < y.size: return False
-        if not self.positive:
+        elif not self.positive:
             if self.size < y.size: return True
             elif self.size > y.size: return False
         else: 
@@ -111,6 +117,15 @@ class BigNumberLL: ### To complete
         else: return True 
         
     def __add__(self,y) -> "BigNumberLL":
+        newNum = BigNumberLL()
+        if self.positive and not y.positive:
+            y.positive = True
+            return self - y
+        elif y.positive and not self.positive:
+            self.positive = True
+            return y - self
+        if not self.positive and not y.positive:
+            newNum.positive = False
         if self.size > y.size:
             biggerN = self
             smallerNum = y
@@ -119,7 +134,6 @@ class BigNumberLL: ### To complete
             smallerNum = self
         bigCurrent = biggerN.last
         smallCurrent = smallerNum.last
-        newNum = BigNumberLL()
         remainder = 0
         while bigCurrent is not None:
             bigData = bigCurrent.data
@@ -141,17 +155,22 @@ class BigNumberLL: ### To complete
         return newNum
 
     def __sub__(self,y) -> "BigNumberLL":
-        if self>y:
-            biggerN = self
-            smallerNum = y
-        else: #order doesnt matter if they are equal size
+        newNum = BigNumberLL()
+        if not self.positive and y.positive:
+            y.positive = False
+            return self + y
+        #elif not self.positive and not y.positive:
+        #    y.positive = True
+         #   return y-self
+        if y>self:
             biggerN = y
             smallerNum = self
+            newNum.positive = False
+        else: #order doesnt matter if they are equal size
+            biggerN = self
+            smallerNum = y
         bigCurrent = biggerN.last
         smallCurrent = smallerNum.last
-        newNum = BigNumberLL()
-        if self<y: #make sign negative if what your subtracting by is larger
-            newNum.positive = False
         remainder = 0
         while bigCurrent is not None:
             bigData = bigCurrent.data
@@ -161,11 +180,9 @@ class BigNumberLL: ### To complete
                 smallData = smallCurrent.data
                 smallCurrent = smallCurrent.prev
             newData = bigData - smallData + remainder #add remainder to new row
-            remainder = 0
+            remainder = 0 #refresh
             if newData < 0:
                 newData = 10 + newData
-                remainder -=1
-            if bigData == 0 and not smallData == 0:
                 remainder -=1
             newNum.insertFirst(newData)
             bigCurrent = bigCurrent.prev
@@ -187,29 +204,20 @@ class BigNumberLL: ### To complete
         newNum.insertFirst(remainder)
         newNum.trimFront()
         return newNum
-
-
-
-
-        
-
-
-
-
-        
-
-
-        
-
-
-
-        
-
-
-
     
-    
- 
+    def __mul__(self,y) -> "BigNumberLL":
+        newNum = BigNumberLL()
+        if (self.positive and not y.positive) or (not self.positive and y.positive):
+            newNum.positive = False
+        current = self.last
+        yCurrent = y.last
+        remainder = 0 #used?
+        while current is not None:
+            self.scale(yCurrent)
+            newNum += self
+            current = current.prev
+        newNum.trimFront()
+        return newNum
 
-
+#513 27 19 243
 
