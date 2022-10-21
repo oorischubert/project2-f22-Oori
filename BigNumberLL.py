@@ -84,19 +84,18 @@ class BigNumberLL: ### To complete
     def __gt__(self,y) -> bool:
         #Scan size of each 
         if self.positive and not y.positive: return True
-        elif not self.positive and y.positive: return False
-        #elif not self.positive and not y.positive:
-         #   newNumSelf = self
-         #   newNumY = y
-         #   newNumSelf.positive = True
-         #   newNumY.positive = True
-         #   return newNumY > newNumSelf
-        elif self.positive:
+        if not self.positive and y.positive: return False
+        if self.positive:
             if self.size > y.size: return True
             elif self.size < y.size: return False
-        elif not self.positive:
+        if not self.positive:
             if self.size < y.size: return True
             elif self.size > y.size: return False
+            newNumSelf = self
+            newNumY = y
+            newNumSelf.positive = True
+            newNumY.positive = True
+            return newNumY > newNumSelf
         else: 
             current = self.first
             yCurrent = y.first
@@ -159,9 +158,9 @@ class BigNumberLL: ### To complete
         if not self.positive and y.positive:
             y.positive = False
             return self + y
-        #elif not self.positive and not y.positive:
-        #    y.positive = True
-         #   return y-self
+        elif not self.positive and not y.positive:
+            y.positive = True
+            return y+self
         if y>self:
             biggerN = y
             smallerNum = self
