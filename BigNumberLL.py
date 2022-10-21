@@ -9,7 +9,7 @@ class Link:
         self.prev = None   
         self.next = None   
 
-    def __str__(self):
+    def __str__(self) -> str:
       return str(self.data)
   
 class BigNumberLL: ### To complete
@@ -27,7 +27,7 @@ class BigNumberLL: ### To complete
                 self.insertLast(int(number[i]))
             self.trimFront()
     
-    def insertLast(self, data):
+    def insertLast(self, data) -> None:
         if self.first == None:
             self.first = Link(data)
             self.last = self.first
@@ -38,7 +38,7 @@ class BigNumberLL: ### To complete
             self.last = newLink
         self.size += 1
     
-    def insertFirst(self, data):
+    def insertFirst(self, data) -> None:
         if self.first == None:
             self.first = Link(data)
             self.last = self.first
@@ -63,7 +63,7 @@ class BigNumberLL: ### To complete
         while self.first.data == 0 and self.size is not 1:
             self.deleteFirst()
             
-    def __str__(self):
+    def __str__(self) -> str:
         display = "[%s] "%(self.size)
         numDisplay = ""
         if not self.positive:
@@ -81,7 +81,7 @@ class BigNumberLL: ### To complete
             newNumDisplay += numDisplay[len(numDisplay)-i-1]
         return display + newNumDisplay
     
-    def __gt__(self,y):
+    def __gt__(self,y) -> bool:
         #Scan size of each 
         if self.positive and not y.positive: return True
         if not self.positive and y.positive: return False
@@ -103,14 +103,14 @@ class BigNumberLL: ### To complete
                 yCurrent = yCurrent.next
             return False
 
-    def __lt__(self,y):
+    def __lt__(self,y) -> bool:
         return(y>self)
 
-    def __eq__(self,y):
+    def __eq__(self,y) -> bool:
         if  self>y or y>self: return False
         else: return True 
         
-    def __add__(self,y):
+    def __add__(self,y) -> "BigNumberLL":
         if self.size > y.size:
             biggerN = self
             smallerNum = y
@@ -171,6 +171,27 @@ class BigNumberLL: ### To complete
             bigCurrent = bigCurrent.prev
         newNum.trimFront()
         return newNum
+
+    def scale(self, factor) -> "BigNumberLL":
+        newNum = BigNumberLL()
+        current = self.last
+        remainder = 0
+        while current is not None:
+            newData = (current.data * factor) + remainder
+            remainder = 0 #refresh
+            while newData >= 10:
+                newData -= 10 #move over to remainder
+                remainder += 1
+            newNum.insertFirst(newData)
+            current = current.prev
+        newNum.insertFirst(remainder)
+        newNum.trimFront()
+        return newNum
+
+
+
+
+        
 
 
 
