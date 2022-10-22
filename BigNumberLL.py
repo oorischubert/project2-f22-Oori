@@ -206,17 +206,18 @@ class BigNumberLL: ### To complete
     
     def __mul__(self,y) -> "BigNumberLL":
         newNum = BigNumberLL()
+        yCurrent = y.last
+        yStep = 0 
+        while yCurrent is not None:
+            newScaled = self.scale(yCurrent.data)
+            for i in range(yStep):
+                newScaled.insertLast(0) #add zeros to end
+            yStep+=1 #step y
+            newNum += newScaled
+            yCurrent = yCurrent.prev       
+        newNum.trimFront()
         if (self.positive and not y.positive) or (not self.positive and y.positive):
             newNum.positive = False
-        current = self.last
-        yCurrent = y.last
-        remainder = 0 #used?
-        while current is not None:
-            self.scale(yCurrent)
-            newNum += self
-            current = current.prev
-        newNum.trimFront()
         return newNum
 
-#513 27 19 243
 
