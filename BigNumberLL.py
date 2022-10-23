@@ -190,6 +190,8 @@ class BigNumberLL: ### To complete
 
     def scale(self, factor) -> "BigNumberLL":
         newNum = BigNumberLL()
+        if not self.positive:
+            newNum.positive = False
         current = self.last
         remainder = 0
         while current is not None:
@@ -218,6 +220,8 @@ class BigNumberLL: ### To complete
         newNum.trimFront()
         if (self.positive and not y.positive) or (not self.positive and y.positive):
             newNum.positive = False
+        if not self.positive and not y.positive:
+            newNum.positive = True
         return newNum
 
 
