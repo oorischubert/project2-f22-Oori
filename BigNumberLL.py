@@ -158,7 +158,7 @@ class BigNumberLL: ### To complete
         if not self.positive and y.positive:
             y.positive = False
             return self + y
-        elif not self.positive and not y.positive:
+        elif not y.positive:
             y.positive = True
             return y+self
         if y>self:
